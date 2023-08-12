@@ -1,0 +1,21 @@
+
+/* public/css/styles.css */
+.seat-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.seat-item {
+    flex: 0 0 calc(33.33% - 20px); /* Each column occupies 33.33% width with 20px space between them */
+    margin: 10px;
+    padding: 10px;
+    /* background-color: #f0f0f0; */
+}
+
+
+
+span.booked {
+    background-color: #FF0000;
+    color: white;
+    padding: 8px 12px;
+}
