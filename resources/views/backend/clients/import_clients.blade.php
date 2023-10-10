@@ -15,23 +15,23 @@
            <div class="card">
               <div class="card-body">
 
-	<h3 class="text-primary mb-3">Import Client</h3>
+                    <h3 class="text-primary mb-3">Import Client</h3>
 
-	<form class="forms-sample" method="POST" action="{{route('import.clientfile')}}" 
-    class="forms-sample" enctype="multipart/form-data">
-        @csrf
+                    <form class="forms-sample" method="POST" action="{{route('import.clientfile')}}" 
+                        class="forms-sample" enctype="multipart/form-data">
+                        @csrf
 
-        <div class="mb-3">
-            <label for="exampleInputUsername1" class="form-label">Xlsx File Import</label>
-            <input type="file" name="import_file" class="form-control">
+                        <div class="mb-3">
+                            <label for="exampleInputUsername1" class="form-label">Xlsx File Import</label>
+                            <input type="file" name="import_file" class="form-control">
+                        </div>
+                    
+                        <button type="submit" class="btn btn-inverse-warning me-2">Upload</button>
+                    </form>
+                </div>
+            </div>
         </div>
-	
-		<button type="submit" class="btn btn-inverse-warning me-2">Upload</button>
-	</form>
-</div>
-</div>
-</div>
-</div>
+    </div>
 </div>
 
 @endsection

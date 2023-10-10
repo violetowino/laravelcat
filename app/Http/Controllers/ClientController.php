@@ -11,7 +11,7 @@ class ClientController extends Controller
 {
     public function ClientDashboard(){
         return view('client.index3');
-    }
+    } //End Method
 
     public function ClientLogout(Request $request)
     {
@@ -29,6 +29,7 @@ class ClientController extends Controller
         $profileData = User::find($id);
         return view('client.client_profile_view', compact('profileData'));
     }//End Method
+
 
     public function ClientProfileStore(Request $request){
         $id = Auth::user()->id;
@@ -53,13 +54,15 @@ class ClientController extends Controller
         );
 
         return redirect()->back()->with($notification);
-    }
+    } //End Method
+
 
     public function ClientChangePassword(){
         $id = Auth::user()->id;
         $profileData = User::find($id);
         return view('client.client_change_password',compact('profileData'));
-    }
+    } //End Method
+
 
     public function ClientUpdatePassword(Request $request){
         $request->validate([
@@ -75,7 +78,7 @@ class ClientController extends Controller
             'password' => Hash::make($request->new_password)
         ]);
         return back()->with();
-    }
+    } //End Method
 
    
 }

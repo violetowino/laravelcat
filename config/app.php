@@ -170,7 +170,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        \Safaricom\Mpesa\MpesaServiceProvider::class
+        \Safaricom\Mpesa\MpesaServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -185,8 +185,8 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-    'Mpesa' => \Safaricom\Mpesa\MpesaServiceProvider::class,
     'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+    'Mpesa'=> \Safaricom\Mpesa\MpesaServiceProvider::class,
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 

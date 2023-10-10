@@ -1,61 +1,19 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <style>
-        #map {
-            height: 400px;
-            width: 100%;
-        }
-    </style>
-</head>
-<body>
-    <div id="map"></div>
+@extends('client.client_dashboard')
+@section('client')
 
-    <form id="directionsForm">
-        <input type="text" name="origin" placeholder="Origin" required>
-        <input type="text" name="destination" placeholder="Destination" required>
-        <button type="submit">Get Directions</button>
-    </form>
+<div class="page-content">
+    <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
+    <div class="col-lg-12 col-xl-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="text-primary h-font text-center fs-3">Map</h2>
+            <hr>
+            <iframe class="w-100 rounded"  height="400px" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d127649.12286490899!2d37.002073358037904!3d-1.1353063261187792!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f4616a21d035d%3A0xd46c6efa3589f45f!2sJuja!5e0!3m2!1sen!2ske!4v1688729411760!5m2!1sen!2ske" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <script async
-    src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&callback=initMap">
-</script>
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
+</div>
     
-
-    <script>
-        $(document).ready(function () {
-            var map = new google.maps.Map(document.getElementById('map'), {
-                center: {lat: -1.286389, lng: 36.817223}, // Default center coordinates
-                zoom: 12 // Default zoom level
-            });
-
-            var directionsService = new google.maps.DirectionsService();
-            var directionsRenderer = new google.maps.DirectionsRenderer({map: map});
-
-            $('#directionsForm').submit(function (e) {
-                e.preventDefault();
-
-                var origin = $('input[name="origin"]').val();
-                var destination = $('input[name="destination"]').val();
-
-                var request = {
-                    origin: origin,
-                    destination: destination,
-                    travelMode: 'DRIVING'
-                };
-
-                directionsService.route(request, function(result, status) {
-                    if (status === 'OK') {
-                        directionsRenderer.setDirections(result);
-                    }
-                });
-            });
-        });
-
-    </script>
-</body>
-</html>
+@endsection

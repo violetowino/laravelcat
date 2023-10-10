@@ -24,6 +24,7 @@ class VerifyEmailController extends Controller
         }
 
         return redirect()->intended(RouteServiceProvider::HOME.'?verified=1');
+        //return redirect()->route('login')->with('success', 'Email has been verified. You can now log in.');
         
     }
 }

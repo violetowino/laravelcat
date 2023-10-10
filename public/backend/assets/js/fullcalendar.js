@@ -70,6 +70,27 @@ $(function() {
     ]
   };
 
+  var bookingEvents = {
+    id: 7,  // Adjust the event source ID
+    backgroundColor: 'rgba(255,0,0,.25)',  // Set your desired color
+    borderColor: '#ff0000',
+    events: [
+      // Loop through your $bookings array and create events
+      // @foreach($bookings as $booking)
+      //   {
+      //     title: 'Booking',  // Customize the title if needed
+      //     start: '{{ $booking->time_in }}',
+      //     end: '{{ $booking->time_out }}',
+      //     url: '{{ route('booking.show', $booking->id) }}',  // Adjust the route as needed
+      //   },
+      // @endforeach
+    ]
+  };
+  
+  // Add bookingEvents to the eventSources array
+  
+  
+
   new Draggable(containerEl, {
     itemSelector: '.fc-event',
     eventData: function(eventEl) {
@@ -101,7 +122,7 @@ $(function() {
     // },
     dayMaxEvents: 2,
     events: [],
-    eventSources: [calendarEvents, birthdayEvents, holidayEvents, discoveredEvents, meetupEvents, otherEvents],
+    eventSources: [calendarEvents, birthdayEvents, holidayEvents, discoveredEvents, meetupEvents, otherEvents,bookingEvents],
     drop: function(info) {
         // remove the element from the "Draggable Events" list
         // info.draggedEl.parentNode.removeChild(info.draggedEl);

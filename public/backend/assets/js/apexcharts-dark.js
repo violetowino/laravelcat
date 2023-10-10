@@ -56,22 +56,23 @@ $(function() {
       },
       series: [
         {
-          name: "Data a",
-          data: [45, 52, 38, 45]
+          name: "Basement",
+          data: [45, 52, 38, 45, 65]
         },
         {
-          name: "Data b",
-          data: [12, 42, 68, 33]
+          name: "Rooftop",
+          data: [12, 42, 68, 33, 27]
         },
         {
           name:
-            "Data c",
-          data: [8, 32, 48, 53]
+            "Outdoor",
+          data: [8, 32, 48, 53, 18]
         }
       ],
       xaxis: {
-        type: "datetime",
-        categories: ["2015", "2016", "2017", "2018"],
+        type: "month",
+        categories: ["Jan", "Feb", "March", "April","May", "June", "July",
+         "Aug","Sept", "Oct", "Nov", "Dec"],
         lines: {
           show: true
         },

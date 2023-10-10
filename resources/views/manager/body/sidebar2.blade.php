@@ -21,9 +21,9 @@
 
       <li class="nav-item nav-category">Profile</li>
       <li class="nav-item">
-        <a class="nav-link" data-bs-toggle="collapse" href="#emails" role="button" aria-expanded="false" aria-controls="emails">
+        <a class="nav-link" data-bs-toggle="collapse" href="#emails" role="button" aria-expanded="false" aria-controls="director">
           <i class="link-icon" data-feather="user"></i>
-          <span class="link-title"></i>My Profile</span>
+          <span class="link-title">My Profile</span>
           <i class="link-arrow" data-feather="chevron-down"></i>
         </a>
         <div class="collapse" id="emails">
@@ -38,50 +38,8 @@
         </div>
       </li>
 
-      <li class="nav-item nav-category">Space Updates</li>
-      <li class="nav-item">
-        <a class="nav-link" data-bs-toggle="collapse" href="#emails" role="button" aria-expanded="false" aria-controls="emails">
-          <i class="link-icon" data-feather="mail"></i>
-          <span class="link-title">Space info</span>
-          <i class="link-arrow" data-feather="chevron-down"></i>
-        </a>
-        <div class="collapse" id="emails">
-          <ul class="nav sub-menu">
-            <li class="nav-item">
-              <a href="" class="nav-link">All Spaces</a>
-            </li>
-            <li class="nav-item">
-              <a href="" class="nav-link">Add Space</a>
-            </li>
-            <li class="nav-item">
-              <a href="" class="nav-link">Edit Space</a>
-            </li>
-          </ul>
-        </div>
-      </li>
 
-      <li class="nav-item nav-category">Users</li>
-      <li class="nav-item">
-        <a class="nav-link" data-bs-toggle="collapse" href="#emails" role="button" aria-expanded="false" aria-controls="director">
-          <i class="link-icon" data-feather="user"></i>
-          <span class="link-title">Managers</span>
-          <i class="link-arrow" data-feather="chevron-down"></i>
-        </a>
-        <div class="collapse" id="emails">
-          <ul class="nav sub-menu">
-            <li class="nav-item">
-              <a href="" class="nav-link">All Managers</a>
-            </li>
-            <li class="nav-item">
-              <a href="" class="nav-link">Add Manager</a>
-            </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link">Edit Manager</a>
-            </li>
-          </ul>
-        </div>
-      </li>
-
+      <li class="nav-item nav-category">Users</li>  
       <li class="nav-item">
         <a class="nav-link" data-bs-toggle="collapse" href="#emails" role="button" aria-expanded="false" aria-controls="emails">
           <i class="link-icon" data-feather="user"></i>
@@ -91,97 +49,57 @@
         <div class="collapse" id="emails">
           <ul class="nav sub-menu">
             <li class="nav-item">
-              <a href="" class="nav-link">All Clients</a>
+              <a href="{{ route('all.clients') }}" class="nav-link">All Clients</a>
             </li>
             <li class="nav-item">
-              <a href="" class="nav-link">Add Client</a>
+              <a href="{{ route('add.client') }}" class="nav-link">Add Client</a>
             </li>
             <li class="nav-item">
-              <a href="#" class="nav-link">Edit Client</a>
+              <a href="{{ route('client.trashed') }}" class="nav-link">Client Bin</a>
             </li>
           </ul>
         </div>
       </li>
-
-      <li class="nav-item nav-category">Booking Information</li>
+  
+      <li class="nav-item nav-category">Parking Information</li>
       <li class="nav-item">
         <a class="nav-link" data-bs-toggle="collapse" href="#emails" role="button" aria-expanded="false" aria-controls="emails">
-          <i class="link-icon" data-feather="mail"></i>
-          <span class="link-title">Total Bookings</span>
+          <i class="link-icon" data-feather="bookmark"></i>
+          <span class="link-title">Parking Bookings</span>
           <i class="link-arrow" data-feather="chevron-down"></i>
         </a>
         <div class="collapse" id="emails">
           <ul class="nav sub-menu">
             <li class="nav-item">
-              <a href="" class="nav-link">All Booked Spaces</a>
+              <a href="{{ route('all.parkings')}}" class="nav-link">All Parkings</a>
             </li>
             <li class="nav-item">
-              <a href="pages/email/read.html" class="nav-link">Amount Collected</a>
+              <a href="{{ route('add.parking')}}" class="nav-link">Add Parking</a>
             </li>
             <li class="nav-item">
-              <a href="pages/email/read.html" class="nav-link">Edit Bookings</a>
+              <a href="{{ route('parking.trashed')}}" class="nav-link">Bin</a>
             </li>
           </ul>
         </div>
       </li>
      
       <li class="nav-item">
-        <a href="pages/apps/calendar.html" class="nav-link">
+        <a href="{{ route('calender.index') }}" class="nav-link">
           <i class="link-icon" data-feather="calendar"></i>
           <span class="link-title">Calendar</span>
         </a>
       </li>
 
-      <li class="nav-item nav-category">Roles & Permission</li>
-      <li class="nav-item">
-        <a class="nav-link" data-bs-toggle="collapse" href="#uiComponents" role="button" aria-expanded="false" aria-controls="uiComponents">
-          <i class="link-icon" data-feather="feather"></i>
-          <span class="link-title">Roles & Permission</span>
-          <i class="link-arrow" data-feather="chevron-down"></i>
-        </a>
-        <div class="collapse" id="uiComponents">
-          <ul class="nav sub-menu">
-            <li class="nav-item">
-              <a href="{{ route('all.permissions')}}" class="nav-link">All Permissions</a>
-            </li>
-            <li class="nav-item">
-              <a href="{{ route('all.roles') }}" class="nav-link">All Roles</a>
-            </li>
-            <li class="nav-item">
-              <a href="{{ route('add.role.permission') }}" class="nav-link">Role in Permission</a>
-            </li>
-            <li class="nav-item">
-              <a href="{{ route('all.role.permission') }}" class="nav-link">All Role in Permission</a>
-            </li>
-            
-        </div>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-bs-toggle="collapse" href="#advancedUI" role="button" aria-expanded="false" aria-controls="advancedUI">
-          <i class="link-icon" data-feather="anchor"></i>
-          <span class="link-title">Advanced UI</span>
-          <i class="link-arrow" data-feather="chevron-down"></i>
-        </a>
-        <div class="collapse" id="advancedUI">
-          <ul class="nav sub-menu">
-            <li class="nav-item">
-              <a href="pages/advanced-ui/cropper.html" class="nav-link">Cropper</a>
-            </li>
-            <li class="nav-item">
-              <a href="pages/advanced-ui/owl-carousel.html" class="nav-link">Owl carousel</a>
-            </li>
-          </ul>
-        </div>
-      </li>
+      <br><br>
 
       <div>
-        <li class="dropdown-item py-2">
-            <a href="{{route('manager.logout')}}" class="text-body ms-0">
-              <i class="me-2 icon-md" data-feather="log-out"></i>
-              <span>Log Out</span>
-            </a>
-          </li>
-        </div>
+      <li class="dropdown-item py-2">
+          <a href="{{route('manager.logout')}}" class="text-body ms-0">
+            <i class="me-2 icon-md" data-feather="log-out"></i>
+            <span>Log Out</span>
+          </a>
+        </li>
+      </div>
 
       <div>
         <li class="dropdown-item py-2">
@@ -190,7 +108,7 @@
             <span>Delete Account</span>
           </a>
         </li>
-        </div>
+      </div>
     </ul>
   </div>
 </nav>

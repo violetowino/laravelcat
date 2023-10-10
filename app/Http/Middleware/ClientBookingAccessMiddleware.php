@@ -16,14 +16,14 @@ class ClientBookingAccessMiddleware
      */
     public function handle($request, Closure $next)
     {
-        $bookingId = $request->route('id');
+        $bookingId = $request->route('manage.booking'); // Assuming 'booking' is the route parameter
         $booking = Booking::findOrFail($bookingId);
-    
-        if ($request->user()->can('viewOwnBooking', $booking)) {
-            return $next($request);
-        }
-    
-        abort(403, 'Unauthorized');
+
+        if ($booking->user_id !== auth()->id()) {
+        abort(403, 'Unauthorized'); // User doesn't have access to this booking
+    }
+
+        return $next($request);
     }
     
 }

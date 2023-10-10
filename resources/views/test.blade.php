@@ -1,55 +1,4 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
 
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
-        </div>
-
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ml-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
 
 <form method="POST" action="{{ route('register') }}">
         @csrf
@@ -1455,3 +1404,617 @@ indexO
 
 </body>
 </html>
+
+
+{{-- //CALENDER --}}
+
+@extends('manager.manager_dashboard')
+@section('manager')
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
+
+    {{-- <style>
+        .container{
+            background: rgb(1, 1, 40);
+        }
+    </style> --}}
+</head>
+<body>
+
+    <!-- Button trigger modal -->
+{{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Launch demo modal
+  </button> --}}
+  
+  <!-- Modal -->
+  <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Booking title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" class="form-control" id="name">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" id="saveBtn" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="page-content">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="text-center text-primary">Booking Details</h2>
+                <div class="col-md-11 offset-1 mt-5 mb-5">
+                    <div style="width: 900px; color: rgb(223, 9, 9);">
+                        <div id="calendar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
+<script>
+    $(document).ready(function() {
+        var booking = @json($events);
+      
+        $('#calendar').fullCalendar({
+            header: {
+                left: 'prev, next today',
+                center: 'title',
+                right: 'month, agendaWeek, agendaDay'
+            },
+            events: booking,
+            selectable: true,
+            selectHelper: true,
+            select: function(start, end, alldays){
+                $('#bookingModal').modal('toggle');
+
+                $('#saveBtn').click(function() {
+                    var name = $('#name').val();
+                    var time_in = moment(start).format('YYYY-MM-DD');
+                    var time_out = moment(end).format('YYYY-MM-DD');
+
+                    $.ajax({
+                        url:"{{ route('calender.store')}}",
+                        type: "POST",
+                        dataType: "json",
+                        data: { name, time_in, time_out },
+                        success:function(response)
+                        {
+                        },
+                        error:function(error)
+                        {
+                            if(error.responseJSON.errors){
+                                $('#titleError')
+                            }
+                        },
+                    });
+                });
+            }
+        })
+       
+    }); 
+</script>
+
+
+</body>
+</html>
+
+
+@endsection
+
+
+
+
+{{-- map --}}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <form id="directionsForm">
+        <input type="text" name="origin" placeholder="Origin" required>
+        <input type="text" name="destination" placeholder="Destination" required>
+        <button type="submit">Get Directions</button>
+    </form>
+
+    <script async
+    src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&callback=initMap">
+</script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    
+
+    <script>
+        $(document).ready(function () {
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat: -1.286389, lng: 36.817223}, // Default center coordinates
+                zoom: 12 // Default zoom level
+            });
+
+            var directionsService = new google.maps.DirectionsService();
+            var directionsRenderer = new google.maps.DirectionsRenderer({map: map});
+
+            $('#directionsForm').submit(function (e) {
+                e.preventDefault();
+
+                var origin = $('input[name="origin"]').val();
+                var destination = $('input[name="destination"]').val();
+
+                var request = {
+                    origin: origin,
+                    destination: destination,
+                    travelMode: 'DRIVING'
+                };
+
+                directionsService.route(request, function(result, status) {
+                    if (status === 'OK') {
+                        directionsRenderer.setDirections(result);
+                    }
+                });
+            });
+        });
+
+    </script>
+</body>
+</html>
+
+
+
+
+
+{{-- payment blade --}}
+@extends('client.client_dashboard')
+@section('client')
+
+<div class="page-content">
+
+    <h1>Payment</h1>
+    <hr>
+
+    <h4 class="h-font text-primary mb-2 ">Space Type: <span class="text-info fw-bold fs-4">{{ $space->space_type }}</span></h4>
+        <br>
+    <h4 class="h-font text-primary mb-2 ">Space Number: <span class="text-info fw-bold fs-4">{{ $space->space_number }}</span></h4>
+        <br>
+    <h4 class="h-font text-primary">Price per hour:  <span class="text-info fw-bold fs-4"> KES: {{ $space->price }}</span></h4>
+        <br>
+    <h4 class="h-font text-primary">Total Hours Booked:  <span class="text-info fw-bold fs-4"> KES: {{ $quantity }}</span></h4>
+        <br>
+    <h4 class="h-font text-primary">Total Amount to be Paid:  <span class="text-info fw-bold fs-4"> KES: {{ $totalPrice }}</span></h4>
+        <br>
+    <form action="{{ route('payment.confirm', $space) }}" method="POST">
+        @csrf
+        <input type="hidden" name="space_id" value="{{ $space->id }}">
+
+        <div>
+        <h3 class="mb-3 h-font text-center text-danger">Proceed to pay with: </h3>
+        <div class="col-3 mx-auto">
+            <button class="mt-3 btn btn-outline-primary me-4">
+                <a class="" href="{{ url('/stk/push/simulation') }}">
+                    {{ __('M-PESA') }}
+                </a>
+            </button>
+
+            <button class="mt-3 btn btn-outline-primary">
+                <a class="" href="{{ route('payment.index') }}">
+                    {{ __('PayPal') }}
+                </a>
+            </button>
+        </div>
+
+        {{-- <div class="col-4 mx-auto">
+            <button type="submit" class="btn btn-outline-primary btn-icon-text mt-3 mb-md-0">Confirm Payment</button>
+        </div> --}}
+
+        <div class="col-3 mx-auto">
+            <button type="submit" class=" mt-3 btn btn-outline-primary">
+                Confirm Payment
+            </button>
+        </div>
+        <br><br><br><br><br>
+    </form>
+</div>
+@endsection
+
+
+
+
+{{-- migration --}}
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::table('bookings', function (Blueprint $table) {
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('bookings', function (Blueprint $table) {
+            $table->dropForeign(['user_id']);
+            $table->dropColumn('user_id');
+        });
+    }
+};
+
+
+// mpesa controller
+
+namespace App\Http\Controllers;
+
+
+use Carbon\Carbon;
+use Safaricom\Mpesa\Mpesa;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+
+class MpesaController extends Controller
+{
+    // public function stkSimulation(){
+
+    //     $mpesa= new Mpesa();
+    //     $BusinessShortCode= 174379; 
+    //     $Passkey = 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919';
+    //     $TransactionType = 'CustomerPayBillOnline'; 
+    //     $Amount = 1;
+    //     $PartyA = 254727542403;
+    //     $PartyB = 174379;
+    //     $PhoneNumber = 254727542403; 
+    //     $CallBackURL = 'https://mydomain.com/path'; 
+    //     $AccountReference = "Test"; 
+    //     $TransactionDesc = "Test"; 
+    //     $Remarks = "Payment Received";
+
+    //     $stkPushSimulation=$mpesa->STKPushSimulation(
+    //         $BusinessShortCode, 
+    //         $Passkey, 
+    //         $TransactionType, 
+    //         $Amount,
+    //         $PartyA, 
+    //         $PartyB, 
+    //         $PhoneNumber, 
+    //         $CallBackURL, 
+    //         $AccountReference, 
+    //         $TransactionDesc, 
+    //         $Remarks,
+    //     );
+
+    //     return ($stkPushSimulation);
+    // }
+
+    public function token(){
+        $consumerKey='WDgdYIZbtM4T0y83vH6OngBAaFW1mXAx';
+        $consumerSecret='0KanJYTtO0kRJ9Sf';
+        $url='https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
+
+        $response=Http::withBasicAuth($consumerKey,$consumerSecret)->get($url);
+        return $response['access_token'];
+    }
+
+
+
+    public function initiateStkPush(){
+        $accessToken=$this->token();
+        $url='https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest';
+        $PassKey='bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919';
+        $BusinessShortCode=174379;
+        $Timestamp=Carbon::now()->format('YmdHis');
+        $password=base64_encode($BusinessShortCode.$PassKey.$Timestamp);
+        $TransactionType='CustomerPayBillOnline';
+        $Amount=1;
+        $PartyA=254727542403;
+        $PartyB=174379;
+        $PhoneNumber=254727542403;
+        $CallbackUrl='https://mydomain.com/path';
+        $AccountReference='Neighbours Parking';
+        $TransactionDesc='payment for Parking Fees';
+
+      
+        $response=Http::withToken($accessToken)->post($url,[
+            'BusinessShortCode'=>$BusinessShortCode,
+            'Password'=>$password,
+            'Timestamp'=>$Timestamp,
+            'TransactionType'=>$TransactionType,
+            'Amount'=>$Amount,
+            'PartyA'=>$PartyA,
+            'PartyB'=>$PartyB,
+            'PhoneNumber'=>$PhoneNumber,
+            'CallBackURL'=>$CallbackUrl,
+            'AccountReference'=>$AccountReference,
+            'TransactionDesc'=>$TransactionDesc
+        ]);
+       
+            return ($response);
+        //  $res=json_decode($response);
+
+        // $ResponseCode=$res->ResponseCode;
+        // if($ResponseCode==0){
+        //     $MerchantRequestID=$res->MerchantRequestID;
+        //     $CheckoutRequestID=$res->CheckoutRequestID;
+        //     $CustomerMessage=$res->CustomerMessage;
+
+        //     //save to database
+        //     $payment= new Stkrequest;
+        //     $payment->phone=$PhoneNumber;
+        //     $payment->amount=$Amount;
+        //     $payment->reference=$AccountReference;
+        //     $payment->description=$TransactionDesc;
+        //     $payment->MerchantRequestID=$MerchantRequestID;
+        //     $payment->CheckoutRequestID=$CheckoutRequestID;
+        //     $payment->status='Requested';
+        //     $payment->save();
+
+        //     return $CustomerMessage;
+        // }
+
+    }
+
+    public function stkCallback(){
+        $data = file_get_contents('php://input');
+        Storage::disk('local')->put('stk.txt', $data);
+    }
+}
+
+
+
+// calender
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Merienda:wght@600&family=Poppins&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
+
+    <style>
+        /* .container{
+            background: rgb(1, 1, 40);
+        } */
+        .h-font{
+            font-family: 'Merienda', cursive;
+        }
+    </style>
+</head>
+<body>
+
+  <!-- Modal -->
+  <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Booking title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" class="form-control" id="name">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" id="saveBtn" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="page-content">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="h-font text-center text-primary p-3">Clients Bookings</h1>
+                <div class="col-md-11 offset-1 mt-5 mb-5">
+                    <div style="width: 900px; color: rgb(3, 3, 120);">
+                        <div id="calendar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
+<script>
+    $(document).ready(function() {
+        var booking = @json($events);
+      
+        $('#calendar').fullCalendar({
+            header: {
+                left: 'prev, next today',
+                center: 'title',
+                right: 'month, agendaWeek, agendaDay'
+            },
+            events: booking,
+            selectable: true,
+            selectHelper: true,
+            select: function(start, end, alldays){
+                $('#bookingModal').modal('toggle');
+
+                $('#saveBtn').click(function() {
+                    var name = $('#name').val();
+                    var time_in = moment(start).format('YYYY-MM-DD');
+                    var time_out = moment(end).format('YYYY-MM-DD');
+
+                    $.ajax({
+                        url:"{{ route('calender.store')}}",
+                        type: "POST",
+                        dataType: "json",
+                        data: { name, time_in, time_out },
+                        success:function(response)
+                        {
+                        },
+                        error:function(error)
+                        {
+                            if(error.responseJSON.errors){
+                                $('#titleError')
+                            }
+                        },
+                    });
+                });
+            }
+        })
+       
+    }); 
+</script>
+
+
+</body>
+</html>
+
+{{-- VISA-CARD MODAL --}}
+<div class="modal fade" id="cardModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        
+        @if (Session::has('success'))
+        <div class="alert alert-success text-center">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close"></a>
+            <p>{{ Session::get('success') }}</p>
+        </div>
+        @endif
+
+          <form  role="form" 
+                action="{{ route('stripe.post') }}" 
+                method="post" 
+                class="require-validation"
+                data-cc-on-file="false"
+                data-stripe-publishable-key="{{ env('STRIPE_KEY') }}"
+                id="payment-form">
+                    @csrf
+
+            <div class="modal-header">
+                <h5 class="modal-title d-flex align-items-center">
+                    <i class="bi bi-person-circle fs-3 me-3"></i>User Card Details
+                </h5>
+                <button type="reset" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+              <div class="modal-body">
+
+                <h5 class="text-center text-danger mb-4">Pay KES: {{ $totalPrice }} to Neighbours' Parking</h5>
+                <div class='mb-3'>
+                    <div class='col-xs-12 form-group required'>
+                        <label class='form-label'>Name on Card</label> 
+                        <input class='form-control' size='4' type='text'>
+                    </div>
+                </div>
+
+                <div class='mb-3'>
+                    <div class='col-xs-12 form-group card required'>
+                        <label class='form-label'>Card Number</label> 
+                        <input type='text' class='form-control' name="card_number" size='20' autocomplete='off'>
+                    </div>
+                </div>
+
+                <div class='form-row row'>
+                <div class='col-xs-12 col-md-4 form-group cvc required'>
+                    <label class='form-label'>CVC</label> 
+                    <input type='text' autocomplete='off' class='form-control' name="cvc" placeholder='ex. 311' size='4'>
+                </div>
+
+                <div class='col-xs-12 col-md-4 form-group expiration required'>
+                    <label class='form-label'>Expiration Month</label> <input
+                        class='form-control' name="exp_month" placeholder='MM' size='2'
+                        type='text'>
+                </div>
+
+                <div class='col-xs-12 col-md-4 form-group expiration required'>
+                    <label class='form-label'>Expiration Year</label> <input
+                        class='form-control' name="exp_year" placeholder='YYYY' size='4'
+                        type='text'>
+                </div>
+                </div>
+
+                <div class="row">
+                    <div class="mb-4">
+                        <button class="btn btn-outline-primary btn-block mt-4" type="submit">Pay Now</button>
+                    </div>
+                </div>
+
+               </div>
+          </form>
+      </div>
+    </div>
+  </div>
+
+
+//Email
+
+  <form class="forms-sample" method="POST" action="{{ route('email.send') }}">
+            @csrf
+
+            <div class="mb-3">
+                <label for="exampleInputTextarea" class="form-label">Email Message to All Players:</label>
+                <textarea name="message_all" id="message_all" class="form-control" rows="4"></textarea>
+            </div>
+
+            {{-- <div class="mb-3">
+                <label for="exampleInputTextarea" class="form-label">Additional Notes:</label>
+                <textarea name="notes" id="notes" class="form-control" rows="4"></textarea>
+            </div> --}}
+            
+            {{-- @error('email') --}}
+            @error('message_all')
+            <span>{{ $message }}</span>
+            @enderror
+
+            <button type="submit" name="send_group" class="btn btn-primary me-2">Send</button>
+        </form>
+
+

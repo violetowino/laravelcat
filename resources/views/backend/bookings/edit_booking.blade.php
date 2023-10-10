@@ -6,108 +6,85 @@
     <div class="row profile-body">
         <div class="col-md-8 col-xl-8 middle-wrapper">
             <div class="card">
-              <div class="card-body">
+                <div class="card-body">
 
-	<h6 class="card-title">Edit Booking Details</h6>
+                    <h3 class="text-primary text-center h-font mb-3">Edit Booking Details</h3>
+                    <hr>
 
-	<form class="forms-sample" method="POST" action="{{ route('update.booking') }}">
-        @csrf
+                    <form class="forms-sample" method="POST" action="{{ route('update.booking') }}">
+                        @csrf
 
-	<input type="hidden" name="id" value="{{ $bookings->id}}">
+                        <input type="hidden" name="id" value="{{ $bookings->id}}">
 
-        <div class="mb-3">
-            <label for="exampleInputUsername1" class="form-label">Full Name</label>
-            <input type="text" name="name" class="form-control 
-            @error('name') is-invalid @enderror" value="{{$bookings->name}}">
-            @error('name')
-                <span class="text-danger">{{ $message }}</span>
-            @enderror
-        </div>
+                        <div class="mb-3">
+                            <label for="exampleInputUsername1" class="form-label" style="color: #fb039c;">Full Name</label>
+                            <input type="text" name="name" class="form-control 
+                            @error('name') is-invalid @enderror" value="{{$bookings->name}}">
+                            @error('name')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
 
-        <div class="mb-3">
-            <label for="exampleInputUsername1" class="form-label">ID Number</label>
-            <input type="text" name="id_number" class="form-control 
-            @error('id_number') is-invalid @enderror" value="{{$bookings->id_number}}">
-            @error('id_number')
-                <span class="text-danger">{{ $message }}</span>
-            @enderror
-        </div>
+                        <div class="mb-3">
+                            <label for="exampleInputUsername1" class="form-label" style="color: #fb039c;">ID Number</label>
+                            <input type="text" name="id_number" class="form-control 
+                            @error('id_number') is-invalid @enderror" value="{{$bookings->id_number}}">
+                            @error('id_number')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
 
-        <div class="mb-3">
-            <label for="exampleInputUsername1" class="form-label">Phone Number</label>
-            <input type="text" name="phone" class="form-control 
-            @error('phone') is-invalid @enderror" value="{{$bookings->phone}}">
-            @error('phone')
-                <span class="text-danger">{{ $message }}</span>
-            @enderror
-        </div>
+                        
+                        <div class="mb-3">
+                            <label for="exampleInputUsername1" class="form-label" style="color: #fb039c;">Number Plate</label>
+                            <input type="text" name="number_plate" class="form-control 
+                            @error('number_plate') is-invalid @enderror" value="{{$bookings->number_plate}}">
+                            @error('number_plate')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
 
-        <div class="mb-3">
-            <label for="exampleInputUsername1" class="form-label">Number Plate</label>
-            <input type="text" name="number_plate" class="form-control 
-            @error('number_plate') is-invalid @enderror" value="{{$bookings->number_plate}}">
-            @error('number_plate')
-                <span class="text-danger">{{ $message }}</span>
-            @enderror
-        </div>
+                        <div class="col-md-12 ps-0 mb-3">
+                            <label for="county" style="color: #fb039c;">County</label>
+                            <select name="county" class="form-select" id="county">
+                                <option selected disabled>{{ $bookings->county}}</option>
+                                @foreach($counties as $county)
+                                    <option value="{{ $county->county_name }}" {{ $bookings->county === $county->county_code ? 'selected' : '' }}>
+                                        {{ $county->county_name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
-        <div class="mb-3">
-            <label for="exampleInputUsername1" class="form-label">Space Type</label>
-            <input type="text" name="space_type" class="form-control 
-            @error('space_type') is-invalid @enderror" value="{{$bookings->space_type}}">
-            @error('space_type')
-                <span class="text-danger">{{ $message }}</span>
-            @enderror
-        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label" style="color: #fb039c;">Phone</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <select name="country_code" id="country_code" class="form-control">
+                                        <option value="+254">+254</option>
+                                    </select>
+                                </div>
+                                <input type="text" name="phone" id="phone" class="form-control" value="{{ str_replace('+254', '', $bookings->phone) }}">
+                            </div>
+                        </div>
 
-        <div class="mb-3">
-            <label for="exampleInputUsername1" class="form-label"> Space Number</label>
-            <input type="text" name="space_number" class="form-control 
-            @error('space_number') is-invalid @enderror" value="{{$bookings->space_number}}">
-            @error('space_number')
-                <span class="text-danger">{{ $message }}</span>
-            @enderror
-        </div>
+                        <div class="col-md-12 ps-0 mb-3">
+                            <label for="exampleInputUsername1" class="form-label" style="color: #fb039c;"> Address</label>
+                            <input type="textarea" name="address" class="form-control" value="{{$bookings->address}}">
+                        </div>
 
-        <div class="mb-3">
-            <label for="exampleInputUsername1" class="form-label">Amount Paid</label>
-            <input type="text" name="amount_paid" class="form-control 
-            @error('amount_paid') is-invalid @enderror" value="{{$bookings->amount_paid}}">
-            @error('amount_paid')
-                <span class="text-danger">{{ $message }}</span>
-            @enderror
-        </div>
+                        <div class=" col-md-12 ps-0 mb-3">
+                            <label for="exampleInputUsername1" class="form-label" style="color: #fb039c;">Time-in</label>
+                            <input type="datetime-local" name="time_in" class="form-control" value="{{$bookings->time_in}}">
+                        </div>
 
-        <div class="mb-3">
-            <label for="exampleInputUsername1" class="form-label">Payment Code</label>
-            <input type="text" name="payment_code" class="form-control 
-            @error('payment_code') is-invalid @enderror" value="{{$bookings->payment_code}}">
-            @error('payment_code')
-                <span class="text-danger">{{ $message }}</span>
-            @enderror
-        </div>
+                        <div class=" col-md-12 ps-0 mb-3">
+                            <label for="exampleInputUsername1" class="form-label" style="color: #fb039c;">Time Out</label>
+                            <input type="datetime-local" name="time_out" class="form-control" value="{{$bookings->time_out}}">
+                        </div>
 
-        <div class="mb-3">
-            <label for="exampleInputUsername1" class="form-label">Time In</label>
-            <input type="datetime-local" name="time_in" class="form-control 
-            @error('time_in') is-invalid @enderror" value="{{$bookings->time_in}}">
-            @error('time_in')
-                <span class="text-danger">{{ $message }}</span>
-            @enderror
-        </div>
-
-        <div class="mb-3">
-            <label for="exampleInputUsername1" class="form-label">Time Out</label>
-            <input type="datetime-local" name="time_out" class="form-control 
-            @error('time_out') is-invalid @enderror" value="{{$bookings->time_out}}">
-            @error('time_out')
-                <span class="text-danger">{{ $message }}</span>
-            @enderror
-        </div>
-        <button type="submit" class="btn btn-primary me-2">Save Changes</button>
-
-    </form>
-
+                        <button type="submit" class="btn btn-primary me-2">Save Changes</button>
+                    </form>
                 </div>
             </div>  
         </div>

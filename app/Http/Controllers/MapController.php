@@ -11,7 +11,8 @@ class MapController extends Controller
     public function index()
     {
         return view('map.index');
-    }
+    } //End Method
+
 
     public function getDirections(Request $request)
     {
@@ -26,5 +27,5 @@ class MapController extends Controller
         $response = $googleMaps->load('directions')->get($directions);
 
         return response()->json($response);
-    }
+    } //End Method
 }

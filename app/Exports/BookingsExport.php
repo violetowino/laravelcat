@@ -12,6 +12,18 @@ class BookingsExport implements FromCollection
     */
     public function collection()
     {
-        return Booking::select('id_number', 'name', 'phone', 'number_plate')->get();
+        return Booking::select('id_number', 'name', 'phone', 'number_plate', 'user_id', 'space_id')->get();
+    }
+
+    public function headings(): array
+    {
+        return [
+            'ID Number',
+            'Name',
+            'Phone',
+            'Number Plate',
+            'User Id',
+            'Space Id'
+        ];
     }
 }

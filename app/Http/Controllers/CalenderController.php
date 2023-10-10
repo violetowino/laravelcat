@@ -20,8 +20,8 @@ class CalenderController extends Controller
             ];
         }
 
-    return view('calender.calender_index', compact('events'));
-   }
+        return view('calender.calender_index', compact('events'));
+    }
 
    public function CalenderStore(Request $request){
         

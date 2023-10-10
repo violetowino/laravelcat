@@ -19,6 +19,8 @@ class BookingsImport implements ToModel
             'name'    => $row[1], 
             'phone'    => $row[2],
             'number_plate' => $row[3],
+            'user_id' => $row[4],
+            'space_id' => $row[5],
         ]);
     }
 }

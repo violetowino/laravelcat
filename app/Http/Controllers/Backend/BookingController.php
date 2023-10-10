@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Models\User;
+use App\Models\Space;
+use App\Models\County;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 use App\Exports\BookingsExport;
@@ -9,54 +12,61 @@ use App\Imports\BookingsImport;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Session;
+use DateTime;
 
 class BookingController extends Controller
 {
     public function ManageBooking(){
-        $id = Auth::user()->id;
-        $bookings = Booking::latest()->get();
+        $user = Auth::user();
+        $bookings = $user->bookings;
         return view('client.manage_booking', compact('bookings'));
-    }
+    } //End Method
+
 
     public function BookSpace(){
 
-        return view('client.book_space');
-    }
+        $counties = County::all();
+        return view('client.book_space', compact('counties'));
+    } //End Method
+
 
     public function BookingStore(Request $request){
 
-        $request->validate([
+        $user = Auth::user();
+        $space = Space::all();
 
+        $request->validate([
             'name' => 'required',
             'id_number' => 'required',
             'number_plate' => 'required',
             'county' => 'required',
             'phone' => 'required',
             'address' => 'required',
-            'time_in' => 'required',
-            'time_out' => 'required'
         ]);
 
-        Booking::insert([
-           
+        $bookingData = [
+            'user_id' => $user->id, 
             'name' => $request->name,
             'id_number' => $request->id_number,
             'number_plate' => $request->number_plate,
             'county' => $request->county,
             'phone' => $request->country_code. $request->phone,
             'address' => $request->address,
-            'time_in' => $request->time_in,
-            'time_out' => $request->time_out,
-            
-        ]);
+        ];
         
-        return redirect()->route('spaces.index');
-    }
+        Booking::create($bookingData);
+
+        return view('spaces.index');
+    } //End Method
+
 
     public function BookingEdit($id){
+        $counties = County::all();
         $bookings = Booking::findOrFail($id);
-        return view('client.booking_edit', compact('bookings'));
-    }
+        return view('client.booking_edit', compact('bookings','counties'));
+    } //End Method
+
 
     public function BookingUpdate(Request $request){
         $bid = $request->id;
@@ -64,9 +74,9 @@ class BookingController extends Controller
             'name' => $request->name,
             'id_number' => $request->id_number,
             'number_plate' => $request->number_plate,
-            'county' => $request->space_type,
+            'county' => $request->county,
             'phone' => $request->country_code. $request->phone,
-            'address' => $request->space_number,
+            'address' => $request->address,
             'time_in' => $request->time_in,
             'time_out' => $request->time_out,
 
@@ -76,8 +86,8 @@ class BookingController extends Controller
             'alert-type' => 'success'
         );
         return redirect()->route('manage.booking')->with($notification);
+    } //End Method
 
-    }
 
     public function BookingDelete($id){
         Booking::findOrFail($id)->delete();
@@ -96,15 +106,15 @@ class BookingController extends Controller
         if (Auth::id()) {
 
             $user = Auth::user();
-
-           
+   
         }else {
             return redirect('login');
         }
     }
 
+//_________________________________________________________________________________________________________________________-
 
-    //Director Booking CRUD
+    //DIRECTOR BOOKING CRUD
 
     public function AllBookings(){
         $bookings = Booking::latest()->get();
@@ -112,9 +122,12 @@ class BookingController extends Controller
 
     } //End method
 
+
     public function AddBooking(){
-        return view('backend.bookings.add_booking');
+        $counties = County::all();
+        return view('backend.bookings.add_booking', compact('counties'));
     } //End method
+
 
     public function StoreBooking(Request $request){
 
@@ -133,23 +146,27 @@ class BookingController extends Controller
             'name' => $request->name,
             'id_number' => $request->id_number,
             'number_plate' => $request->number_plate,
-            'county' => $request->space_type,
+            'county' => $request->county,
             'phone' => $request->country_code. $request->phone,
-            'address' => $request->space_number,
+            'address' => $request->address,
             'time_in' => $request->time_in,
             'time_out' => $request->time_out,
+            'user_id' => Auth::id()
         ]);
         $notification = array(
             'message'=> 'Booking added Successfully',
             'alert-type' => 'success'
         );
         return redirect()->route('all.bookings')->with($notification);
-    }
+    } //End Method
+
 
     public function EditBooking($id){
+        $counties = County::all();
         $bookings = Booking::findOrFail($id);
-        return view('backend.bookings.edit_booking', compact('bookings'));
-    }
+        return view('backend.bookings.edit_booking', compact('bookings','counties'));
+    } //End Method
+
 
     public function UpdateBooking(Request $request){
 
@@ -158,9 +175,9 @@ class BookingController extends Controller
             'name' => $request->name,
             'id_number' => $request->id_number,
             'number_plate' => $request->number_plate,
-            'county' => $request->space_type,
+            'county' => $request->county,
             'phone' => $request->country_code. $request->phone,
-            'address' => $request->space_number,
+            'address' => $request->address,
             'time_in' => $request->time_in,
             'time_out' => $request->time_out,
         ]);
@@ -169,7 +186,8 @@ class BookingController extends Controller
             'alert-type' => 'success'
         );
         return redirect()->route('all.bookings')->with($notification);
-    }
+    } //End Method
+
 
     public function SoftDeleteBooking($id){
         Booking::findOrFail($id)->delete();
@@ -180,25 +198,29 @@ class BookingController extends Controller
         );
 
         return redirect()->back()->with($notification);
-    }
+    } //End Method
+
 
     public function BookingTrashed(){
         $bookings = Booking::onlyTrashed()->get();
 
         return view('backend.bookings.booking_trash', compact('bookings'));
-    }
+    } //End Method
+
 
     public function BookingRestore($id){
         Booking::whereId($id)->restore();
         
         return back();
-    }
+    } //End Method
+
 
     public function BookingRestoreAll(){
         Booking::onlyTrashed()->restore();
         
         return back();
-    }
+    } //End Method
+
 
     public function BookingForceDelete($id){
         Booking::onlyTrashed()->findOrFail($id)->forceDelete();
@@ -208,10 +230,12 @@ class BookingController extends Controller
     } //End method
 
 
+    //Reports
     public function ImportBookings(){
 
         return view('backend.bookings.import_bookings');
-    }
+    } //End Method
+
 
     public function ExportBooking(){
         
@@ -223,7 +247,8 @@ class BookingController extends Controller
         );
 
         return redirect()->back()->with($notification);
-    }
+    } //End Method
+
 
     public function ImportBookingFile(Request $request){
 
@@ -235,7 +260,7 @@ class BookingController extends Controller
         );
 
         return redirect()->back()->with($notification);
-    }
+    } //End Method
 
 
 }
